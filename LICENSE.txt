@@ -1,0 +1,23 @@
+ECOHOME PHONE VIEW - GIẤY PHÉP SỬ DỤNG / END USER LICENSE
+Bản quyền / Copyright (c) 2026 Phạm Anh Tuấn (Ecohome). Bảo lưu mọi quyền / All rights reserved.
+
+TIẾNG VIỆT
+1. Được phép (miễn phí, không cần xin phép):
+   a) Cài đặt và sử dụng plugin để xuất bản vẽ, kể cả trong công việc kinh doanh của bạn.
+   b) Chia sẻ các tệp HTML mà plugin xuất ra cho công nhân, khách hàng, đối tác.
+   c) Sao chép và chuyển tiếp nguyên vẹn tệp .rbz gốc do tác giả phát hành, miễn phí, giữ nguyên mọi nội dung.
+2. Không được phép nếu chưa có văn bản đồng ý của tác giả:
+   a) Sửa đổi, dịch ngược, tháo rời, trích tách mã nguồn hoặc mã hóa của plugin hay của trình xem HTML.
+   b) Xóa, che hoặc thay đổi tên "Ecohome Phone View", thông tin tác giả, màn hình mời ủng hộ và thông tin tài khoản trong plugin.
+   c) Bán, cho thuê, hoặc đăng lại plugin (dù đã sửa hay chưa sửa) dưới tên khác hoặc với mục đích thu phí.
+   d) Dùng mã hay thiết kế của plugin để tạo sản phẩm cạnh tranh.
+3. Plugin được cung cấp "nguyên trạng", không bảo hành. Tác giả không chịu trách nhiệm cho thiệt hại phát sinh khi sử dụng, bao gồm sai sót số liệu trên bản vẽ xuất ra. Hãy đối chiếu kích thước quan trọng với bản vẽ gốc trước khi gia công.
+4. Việc ủng hộ (donate) là hoàn toàn tự nguyện và không phải điều kiện để sử dụng.
+5. Vi phạm giấy phép này làm chấm dứt quyền sử dụng của bạn.
+
+ENGLISH
+1. Permitted (free of charge): (a) install and use the plugin, including in your business; (b) share the HTML files the plugin exports with workers, customers and partners; (c) copy and forward the original, unmodified .rbz released by the author, free of charge.
+2. Not permitted without the author's written consent: (a) modifying, reverse-engineering, decompiling, or extracting the source or protected code of the plugin or its HTML viewer; (b) removing, hiding or altering the name "Ecohome Phone View", author credits, the support (donation) screen or its account details; (c) selling, renting or republishing the plugin (modified or not) under another name or for a fee; (d) using the plugin's code or design to build a competing product.
+3. The plugin is provided "as is" without warranty of any kind. The author is not liable for any damages arising from its use, including errors in exported drawings. Verify critical dimensions against the original drawings before manufacturing.
+4. Donations are voluntary and are not a condition of use.
+5. Violating this license terminates your right to use the plugin.
