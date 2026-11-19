@@ -1,34 +1,95 @@
 <!DOCTYPE html>
 <html lang="vi"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Ecohome Phone View - Mở bản vẽ</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bản vẽ">
+<title>Ecohome Phone View - Bản vẽ</title>
 <style>
-html,body{margin:0;height:100%;font:17px/1.5 -apple-system,Roboto,sans-serif;background:#f4f4f2;color:#222}
-#home{max-width:480px;margin:0 auto;padding:28px 20px}
-h1{font-size:22px;margin:0 0 6px}p{margin:8px 0;color:#555}
-label.btn{display:block;margin:22px 0 10px;padding:18px;background:#1f6f43;color:#fff;border-radius:12px;text-align:center;font-weight:700;font-size:18px}
-input{display:none}small{color:#777}#err{color:#c00;font-weight:600}
+html,body{margin:0;height:100%;font:17px/1.45 -apple-system,Roboto,sans-serif;background:#f4f4f2;color:#222}
+#home{max-width:520px;margin:0 auto;padding:22px 16px 40px}
+h1{font-size:22px;margin:0 0 4px}p{margin:6px 0;color:#555}
+label.btn{display:block;margin:16px 0 8px;padding:16px;background:#1f6f43;color:#fff;border-radius:12px;text-align:center;font-weight:700;font-size:18px}
+input[type=file]{display:none}small,.meta{color:#777;font-size:13px}#err{color:#c00;font-weight:600}
+h2{font-size:16px;margin:22px 0 8px;display:flex;justify-content:space-between;align-items:center}
+h2 button{border:0;background:none;color:#b00;font-size:14px}
+.item{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ddd;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.item .main{flex:1;min-width:0;padding:12px 4px 12px 14px;cursor:pointer}
+.item .name{font-weight:650;word-break:break-word}
+.item .del{border:0;background:none;font-size:20px;color:#999;padding:12px 14px}
 iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
+#back{position:fixed;left:0;top:50%;width:18px;height:64px;margin-top:-32px;z-index:5;display:none;background:rgba(31,111,67,.55);color:#fff;border:0;border-radius:0 10px 10px 0;font-size:14px;padding:0}
 </style></head><body>
 <div id="home">
 <h1>Ecohome Phone View</h1>
-<p>Mở file bản vẽ .html đã nhận từ xưởng. File được mở ngay trên máy bạn, không tải lên mạng.</p>
-<label class="btn" for="f">Chọn file bản vẽ</label>
+<p>Mở file bản vẽ .html nhận từ xưởng. File được mở và lưu ngay trên máy bạn, không tải lên mạng.</p>
+<label class="btn" for="f">Chọn file bản vẽ mới</label>
 <input id="f" type="file" accept=".html,.htm,text/html">
 <p id="err"></p>
-<small>Mẹo: bấm Chia sẻ trong Safari &gt; Thêm vào Màn hình chính để mở nhanh lần sau.</small>
+<h2><span>Bản vẽ đã mở</span><button id="clr" type="button" style="display:none">Xóa tất cả</button></h2>
+<div id="list"></div>
+<p id="empty" class="meta">Chưa có bản vẽ nào. Chọn file lần đầu, lần sau chỉ cần bấm vào đây.</p>
+<small id="tip">Mẹo: bấm Chia sẻ trong Safari &gt; Thêm vào Màn hình chính. Nên làm vậy để iPhone không tự xóa danh sách khi lâu không mở Safari.</small>
 </div>
 <iframe id="v" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-modals allow-popups allow-downloads"></iframe>
+<button id="back" type="button" aria-label="Về danh sách">&#x2039;</button>
 <script>
-document.getElementById('f').addEventListener('change',function(e){
-  var file=e.target.files&&e.target.files[0],err=document.getElementById('err');err.textContent='';
-  if(!file)return;
-  var r=new FileReader();
-  r.onerror=function(){err.textContent='Không đọc được file. Hãy thử chọn lại.'};
-  r.onload=function(){
-    var fr=document.getElementById('v');fr.style.display='block';document.getElementById('home').style.display='none';
-    fr.srcdoc=r.result;
-  };
-  r.readAsText(file,'utf-8');
-});
+(function(){
+  var $=function(i){return document.getElementById(i)}, db=null, DB='ecohome-phoneview', ST='files';
+  function open(){return new Promise(function(res,rej){
+    var rq=indexedDB.open(DB,1);
+    rq.onupgradeneeded=function(){rq.result.createObjectStore(ST,{keyPath:'id',autoIncrement:true})};
+    rq.onsuccess=function(){res(rq.result)};rq.onerror=function(){rej(rq.error)};
+  })}
+  function tx(mode,fn){return new Promise(function(res,rej){
+    var t=db.transaction(ST,mode),s=t.objectStore(ST),out=fn(s);
+    t.oncomplete=function(){res(out&&out.result)};t.onerror=t.onabort=function(){rej(t.error||new Error('db'))};
+  })}
+  function all(){return tx('readonly',function(s){return s.getAll()}).then(function(a){return a.sort(function(x,y){return y.opened-x.opened})})}
+  function fmt(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB'}
+  function when(t){var d=new Date(t);return d.toLocaleDateString('vi-VN')+' '+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function show(html){
+    $('home').style.display='none';$('v').style.display='block';$('back').style.display='block';
+    $('v').srcdoc=html;history.pushState({v:1},'');
+  }
+  function close(){$('v').style.display='none';$('back').style.display='none';$('home').style.display='';$('v').srcdoc='';refresh()}
+  window.addEventListener('popstate',function(){if($('v').style.display==='block')close()});
+  $('back').addEventListener('click',function(){if(history.state&&history.state.v)history.back();else close()});
+  function refresh(){
+    if(!db){$('empty').textContent='Trình duyệt này không lưu được danh sách, nhưng vẫn mở file bình thường.';return}
+    all().then(function(a){
+      var l=$('list');l.innerHTML='';$('empty').style.display=a.length?'none':'';$('clr').style.display=a.length?'':'none';
+      a.forEach(function(r){
+        var d=document.createElement('div');d.className='item';
+        d.innerHTML='<div class="main"><div class="name">'+esc(r.name)+'</div><div class="meta">'+fmt(r.size)+' · mở '+when(r.opened)+'</div></div><button class="del" type="button" aria-label="Xóa">&#x2715;</button>';
+        d.querySelector('.main').addEventListener('click',function(){
+          tx('readwrite',function(s){r.opened=Date.now();return s.put(r)}).catch(function(){});show(r.html)});
+        d.querySelector('.del').addEventListener('click',function(){
+          if(confirm('Xóa "'+r.name+'" khỏi danh sách?'))tx('readwrite',function(s){return s.delete(r.id)}).then(refresh)});
+        l.appendChild(d);
+      });
+    });
+  }
+  $('clr').addEventListener('click',function(){if(confirm('Xóa toàn bộ danh sách bản vẽ trên máy này?'))tx('readwrite',function(s){return s.clear()}).then(refresh)});
+  $('f').addEventListener('change',function(e){
+    var file=e.target.files&&e.target.files[0];$('err').textContent='';if(!file)return;
+    var r=new FileReader();
+    r.onerror=function(){$('err').textContent='Không đọc được file. Hãy thử chọn lại.'};
+    r.onload=function(){
+      var html=r.result;
+      if(db){
+        all().then(function(a){
+          var old=a.filter(function(x){return x.name===file.name})[0];
+          var rec={name:file.name,size:file.size,opened:Date.now(),html:html};if(old)rec.id=old.id;
+          return tx('readwrite',function(s){return s.put(rec)});
+        }).catch(function(){$('err').textContent='Máy không đủ chỗ để lưu vào danh sách, nhưng bản vẽ vẫn mở được.'});
+      }
+      show(html);e.target.value='';
+    };
+    r.readAsText(file,'utf-8');
+  });
+  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){});
+  if(window.indexedDB)open().then(function(d){db=d;refresh()}).catch(function(){refresh()});else refresh();
+})();
 </script></body></html>
