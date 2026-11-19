@@ -4,6 +4,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Bản vẽ">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#1f6f43">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <title>Ecohome Phone View - Bản vẽ</title>
 <style>
 html,body{margin:0;height:100%;font:17px/1.45 -apple-system,Roboto,sans-serif;background:#f4f4f2;color:#222}
@@ -17,6 +22,7 @@ h2 button{border:0;background:none;color:#b00;font-size:14px}
 .item .main{flex:1;min-width:0;padding:12px 4px 12px 14px;cursor:pointer}
 .item .name{font-weight:650;word-break:break-word}
 .item .del{border:0;background:none;font-size:20px;color:#999;padding:12px 14px}
+.ib{width:100%;margin-top:18px;padding:13px;border:2px solid #1f6f43;border-radius:12px;background:#fff;color:#1f6f43;font-weight:700;font-size:16px}
 iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
 #back{position:fixed;left:0;top:50%;width:18px;height:64px;margin-top:-32px;z-index:5;display:none;background:rgba(31,111,67,.55);color:#fff;border:0;border-radius:0 10px 10px 0;font-size:14px;padding:0}
 </style></head><body>
@@ -29,7 +35,8 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;di
 <h2><span>Bản vẽ đã mở</span><button id="clr" type="button" style="display:none">Xóa tất cả</button></h2>
 <div id="list"></div>
 <p id="empty" class="meta">Chưa có bản vẽ nào. Chọn file lần đầu, lần sau chỉ cần bấm vào đây.</p>
-<small id="tip">Mẹo: bấm Chia sẻ trong Safari &gt; Thêm vào Màn hình chính. Nên làm vậy để iPhone không tự xóa danh sách khi lâu không mở Safari.</small>
+<div id="inst"><button id="instb" type="button" class="ib">Cài thành app trên màn hình điện thoại</button>
+<div id="insth" class="meta" style="display:none"><ol style="margin:8px 0 0;padding-left:20px"><li>Mở trang này bằng <b>Safari</b>.</li><li>Bấm nút <b>Chia sẻ</b> (hình ô vuông có mũi tên lên, ở thanh dưới).</li><li>Kéo xuống chọn <b>Thêm vào Màn hình chính</b>, rồi bấm <b>Thêm</b>.</li><li>Từ nay mở bằng biểu tượng <b>Bản vẽ</b> ngoài màn hình. Cách này còn giúp iPhone không tự xóa danh sách khi lâu không dùng.</li></ol></div></div>
 </div>
 <iframe id="v" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-modals allow-popups allow-downloads"></iframe>
 <button id="back" type="button" aria-label="Về danh sách">&#x2039;</button>
@@ -89,6 +96,11 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;di
     };
     r.readAsText(file,'utf-8');
   });
+  var dip=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dip=e});
+  if(window.navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches))$('inst').style.display='none';
+  $('instb').addEventListener('click',function(){if(dip){dip.prompt();dip=null}else{var h=$('insth');h.style.display=h.style.display==='none'?'':'none'}});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){});
   if(window.indexedDB)open().then(function(d){db=d;refresh()}).catch(function(){refresh()});else refresh();
 })();
