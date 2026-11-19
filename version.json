@@ -1,6 +1,6 @@
 {
-  "version": "0.19.1",
-  "rbz": "https://raw.githubusercontent.com/ecohome-tools/ecohome-phone-view/main/dist/Ecohome_PhoneView_0.19.1.rbz",
-  "sha256": "7c65c7ce459e9bea89a8a09efb0810317dd8b858248cf6ededca357ca8bd7276",
-  "notes": "Thêm nét dim; xuất link web cho iPhone qua GitHub Pages; đổi địa chỉ cập nhật. Nếu cập nhật gặp lỗi, hãy gỡ bản cũ rồi cài lại."
+  "version": "0.20.0",
+  "rbz": "https://raw.githubusercontent.com/ecohome-tools/ecohome-phone-view/main/dist/Ecohome_PhoneView_0.20.0.rbz",
+  "sha256": "e5abba2b89295a3f30f865330fc4223c2a79675ef29551fc5eb2c08d7b603f1d",
+  "notes": "Mở bản vẽ trên iPhone bằng trang web có danh sách file đã mở và cài thành app; bỏ tính năng xuất link web (không cần token GitHub)."
 }
