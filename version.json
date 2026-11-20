@@ -1,6 +1,6 @@
 {
-  "version": "0.20.5",
-  "rbz": "https://raw.githubusercontent.com/ecohome-tools/ecohome-phone-view/main/dist/Ecohome_PhoneView_0.20.5.rbz",
-  "sha256": "6b26eec0a11eb61e8a33dc410db58c75b0d373032b20b3e27f0a7af094c8e444",
-  "notes": "Icon mới theo chuẩn Ecohome; thanh nút tính năng thu gọn được trong viewer; thêm nút nhắn Zalo góp ý/báo lỗi; quét model lớn nhanh hơn; tương thích SketchUp 2017 trở lên."
+  "version": "0.20.6",
+  "rbz": "https://raw.githubusercontent.com/ecohome-tools/ecohome-phone-view/main/dist/Ecohome_PhoneView_0.20.6.rbz",
+  "sha256": "24b280ecdcefbadb3a4264382aa9835d3e5bc178a1261e8262df53b773122fd3",
+  "notes": "Thanh nút tính năng thu gọn được là mặc định; icon mới theo chuẩn Ecohome; thêm nút nhắn Zalo góp ý/báo lỗi; quét model lớn nhanh hơn; tương thích SketchUp 2017 trở lên."
 }
